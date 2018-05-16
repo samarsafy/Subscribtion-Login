@@ -9,19 +9,26 @@ class App extends Component {
 
   validSubscripion = () => {
     //read the email from the state and put it in the url
-    let urlOne = `https://cors-anywhere.herokuapp.com/https://us18.api.mailchimp.com/2.0/lists/subscribe.json?   apikey=91cfde92b3f1c432f40b7c011a5120a5-us18&id=4d8d765e84&email[email]=${
-      this.state.userMailAdress
-    }&double_optin=true&send_welcome=falsebb43f9f262`;
 
-    let formInput = "";
+    let urlOne = `https://cors-anywhere.herokuapp.com/https://us18.api.mailchimp.com/2.0/lists/subscribe.json?   apikey=9d41aa0b2b09a3260c4922151bf7f85b-us18&id=4d8d765e84&email[email]=${
+      process.env.REACT_APP_APIKEY
+    }&double_optin=true&send_welcome=falsebb43f9f262`;
+    console.log(this.state.value);
+
     fetch(urlOne)
       .then(resp => resp.json())
       .then(resp => {
         console.log(resp);
-        if (resp.email !== undefined) {
+        if (resp.userMailAdress !== undefined) {
+          console.log("undefined");
           alert("Subscribed!");
         } else if (resp.password === "") {
+          console.log("no Password");
           alert("You did not subscribe");
+        } else resp.userMailAdress && resp.password === "";
+        {
+          console.log("Error");
+          alert("Error");
         }
       });
   };
@@ -35,7 +42,9 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">
+            Welcome to React{process.env.REACT_APP_APIKEY}
+          </h1>
         </header>
         <p className="App-intro">To get started to Login</p>
         <form id="TheForm" className="simform">
@@ -55,7 +64,7 @@ class App extends Component {
               <span>
                 <label htmlFor="Password">Password </label>
               </span>
-              <input className="" type="Password" />
+              <input className="" type="Password" onChange={this.onChange} />
             </li>
 
             <button
